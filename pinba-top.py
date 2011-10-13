@@ -28,7 +28,6 @@ class groupby(dict):
     __iter__ = dict.iteritems
 
 def avg(self, values, cnt=None):
-    """ Вычисляет среднее значение """
     return sum(map(float, values)) / (len(values) if cnt is None else cnt)
 
 class Frontend(object):
@@ -41,7 +40,7 @@ class Frontend(object):
         try:
             while socketio.connected():
                 ts, top, rps, adv = zmq_socket.recv_pyobj()
-                socketio.send(["top", {"time": ts, "top": top, "rps": rps, "adv": adv}])
+                socketio.send(["top", {"time": ts, "top": top, "rps": rps}])
         except zmq.ZMQError, e:
             logger.error("Session %s catch exception: %s, %s" % (session_id, type(e), e))    
         logger.info("Session %s is dead (Connected: %s)" % (session_id, socketio.connected()))
@@ -123,10 +122,9 @@ class PinbaTop(object):
                 server, 
                 sum([r[1][0] for r in request]),
                 [(script, sum([t[1][0] for t in times]), sum([t[1][1] for t in times]), max([t[1][2]['max'] for t in times])) for script, times in scripts],
-                sum([sum([t[1][0] for t in times]) for script, times in scripts if script == "/adplace.php"])
             ))
         for server in servers:
-            top.append((server, 0, [], 0))
+            top.append((server, 0, []))
 
         top.sort(key=lambda r: r[1], reverse=True)
         return top
@@ -155,8 +153,7 @@ class PinbaTop(object):
                     
                     top = self.top(requests)
                     rps = sum([r[1] for r in top])
-                    adv = sum([r[3] for r in top])
-                    self.pub.send_pyobj((ts, top, rps, adv))
+                    self.pub.send_pyobj((ts, top, rps))
                 except zmq.ZMQError:
                     pass
         except KeyboardInterrupt:
