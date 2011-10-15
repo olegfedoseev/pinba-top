@@ -6,9 +6,7 @@
     <script type="text/javascript" src="http://cdn.socket.io/stable/socket.io.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
     <style>
-      table {
-        border-collapse: collapse;
-      }
+      table { border-collapse: collapse; }
       td {
         font-size: 16px;
         font-family: Times;
@@ -17,26 +15,8 @@
         border: 1px dotted;
         text-align: left;
       }
-
-      td.project {
-        width: 200px;
-      }
-      td.rps {
-        width: 50px;
-        text-align: center;
-      }
-      td.adv {
-        width: 50px;
-        text-align: center;
-      }
-      td.percent {
-        width: 60px;
-        text-align: center;
-      }
-
-      td a {
-        
-      }
+      td.project { width: 200px; }
+      td.rps { width: 50px; text-align: center; }
     </style>
     <script type="text/javascript">
       var socket = new io.Socket('ip-of-host', {port: 8080, rememberTransport: false});
@@ -53,7 +33,7 @@
         var time = new Date(data.time * 1000);
         $('#time').html(time.toTimeString().substr(0,8));
         $('#rps').html(data.rps);
-        
+
         var top = data.top;
         var html = '<tr><td class="num">#</td><td class="project">Server</td><td class="rps">RPS</td></tr>';
         for (var i=0, len=top.length; i<len; ++i)
@@ -63,10 +43,9 @@
           var scripts_html = '<table id="scripts_'+i+'" style="display: none">';
           for (var j=0, len2=scripts.length; j<len2; ++j)
           {
-            scripts_html += '<tr><td class="script">' + scripts[j][0] + '</td><td class="scripts_rps">' + scripts[j][1] + '</td></tr>';  
+            scripts_html += '<tr><td class="script">' + scripts[j][0] + '</td><td class="scripts_rps">' + scripts[j][1] + '</td></tr>';
           }
           scripts_html += '</table>';
-          var adv = (project[3] * 100 / project[1])
           html += '<tr>';
           html += '<td>'+(i+1)+'</td>';
           html += '<td class="project"><a href="javascript:void(0);" onclick="show('+i+');">'+project[0]+'</a>'+scripts_html+'</td>';
@@ -92,9 +71,9 @@
         $('#scripts_'+i).toggle();
         return false;
       }
-    </script> 
+    </script>
   </head>
-  <body>    
+  <body>
     <h1><span id="time"></span>, RPS: <span id="rps"></span></h1>
     <p>Top server names by count of requests for last second.</p><p>Click on server name to see scripts of this server. It'll pause updates.</p>
     <input type="button" id="pause_btn" value="Pause" onclick="pause_btn();">
@@ -102,7 +81,7 @@
     <table id="top">
 
     </table>
-    
+
     <br />
     <div id="log" style="font-size: 11px">
       <p>Connecting...</p>
